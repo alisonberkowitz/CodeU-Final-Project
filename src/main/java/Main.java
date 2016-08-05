@@ -15,6 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
+    private static void crawl(WikiCrawler wc) throws IOException {
+        // loop until we index a new page
+        String res;
+        do {
+            res = wc.crawl(false);
+        } while (res == null);
+    }
+
     public static void main(String[] args) throws IOException {
         port(9999);
 
@@ -22,7 +30,13 @@ public class Main {
         Jedis jedis = JedisMaker.make();
         JedisIndex index = new JedisIndex(jedis);
 
+        // set up crawler
+        String source = "https://en.wikipedia.org/wiki/Java_(programming_language)";
+        WikiCrawler wc = new WikiCrawler(source, index);
+        wc.loadQueue(source);
+
         get("/search/:term", (req, res) -> {
+            //crawl(wc);
             WikiSearch search = WikiSearch.search(req.params(":term"),index);
             List<Map.Entry<String, Integer>> entries = search.sort();
             Map map = new HashMap();
@@ -32,11 +46,13 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         get("/", (req, res) -> {
+            //crawl(wc);
             Map map = new HashMap();
             return new ModelAndView(map, "search.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/search", (req, res) -> {
+            //crawl(wc);
             WikiSearch search = WikiSearch.search(req.queryParams("term"),index);
             List<Map.Entry<String, Integer>> entries = search.sort();
             Map map = new HashMap();
