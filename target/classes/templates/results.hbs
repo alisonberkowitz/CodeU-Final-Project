@@ -15,9 +15,9 @@
     {{#titles}}
         <div class="result">
             <!--<h3>Title: #get-title key}}/get-title}}</h3>-->
-            <h2><a href="https://en.wikipedia.org/wiki/{{key}}">{{key}}</a></h2>
-            <h3>https://en.wikipedia.org/wiki/{{key}}</h3>
-            <p>{{term}} appears: {{value}} times</p>
+            <h2><a href={{value.key}}>{{key}}</a></h2>
+            <h3>{{value.key}}</h3>
+            <p>{{term}} appears: {{value.value}} times</p>
         </div>
     {{/titles}}
 </div>

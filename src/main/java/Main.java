@@ -40,10 +40,11 @@ public class Main {
             List<Map.Entry<String, Integer>> entries = search.sort();
 
             // add titles rather than links to show in results
-            List<Map.Entry<String, Integer>> titles = new LinkedList<Map.Entry<String, Integer>>();
+            List<Map.Entry<String, Map.Entry<String, Integer>>> titles = new LinkedList<>();
             for (Map.Entry<String, Integer> entry: entries) {
                 String title = entry.getKey().replaceAll("https://en.wikipedia.org/wiki/", "");
-                titles.add(new AbstractMap.SimpleEntry<>(title, entry.getValue()));
+                title = title.replaceAll("_", " ");
+                titles.add(new AbstractMap.SimpleEntry<>(title, entry));
             }
             Map map = new HashMap();
             map.put("term", req.params(":term"));
