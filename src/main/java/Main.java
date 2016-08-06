@@ -10,9 +10,7 @@ import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
     private static void crawl(WikiCrawler wc) throws IOException {
@@ -25,6 +23,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         port(9999);
+        staticFileLocation("/public");
 
         // make a JedisIndex
         Jedis jedis = JedisMaker.make();
@@ -39,9 +38,17 @@ public class Main {
             //crawl(wc);
             WikiSearch search = WikiSearch.search(req.params(":term"),index);
             List<Map.Entry<String, Integer>> entries = search.sort();
+
+            // add titles rather than links to show in results
+            List<Map.Entry<String, Integer>> titles = new LinkedList<Map.Entry<String, Integer>>();
+            for (Map.Entry<String, Integer> entry: entries) {
+                String title = entry.getKey().replaceAll("https://en.wikipedia.org/wiki/", "");
+                titles.add(new AbstractMap.SimpleEntry<>(title, entry.getValue()));
+            }
             Map map = new HashMap();
             map.put("term", req.params(":term"));
-            map.put("entries", entries);
+            map.put("titles", titles);
+            map.put("listsize", entries.size());
             return new ModelAndView(map, "results.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -52,13 +59,8 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         post("/search", (req, res) -> {
-            //crawl(wc);
-            WikiSearch search = WikiSearch.search(req.queryParams("term"),index);
-            List<Map.Entry<String, Integer>> entries = search.sort();
-            Map map = new HashMap();
-            map.put("term", req.queryParams("term"));
-            map.put("entries", entries);
-            return new ModelAndView(map, "results.hbs");
-        }, new HandlebarsTemplateEngine());
+            res.redirect("/search/"+req.queryParams("term"));
+            return null;
+        });
     }
 }

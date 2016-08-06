@@ -1,13 +1,27 @@
-<form method="post" action="/search">
-    <input type="text" name="term" value="{{term}}">
-    <input type="submit">
-</form>
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/results.css">
 
-<h1>Search Term: {{term}}</h1>
-<h3>Results:</h3>
-{{#entries}}
-    <div>
-        <h3><a href="{{key}}">{{key}}</a></h3>
-        <h4>{{term}} occurs: {{value}} times</h4>
-    </div>
-{{/entries}}
+<div class="searchbox">
+    <form method="post" action="/search" autocomplete="off">
+        <h2>WikiSearcher</h2>
+        <input type="text" name="term" value="{{term}}">
+        <input type="submit" value="search">
+    </form>
+</div>
+
+
+<div class="container">
+    <p>{{listsize}} Results</p>
+    {{#titles}}
+        <div class="result">
+            <!--<h3>Title: #get-title key}}/get-title}}</h3>-->
+            <h2><a href="https://en.wikipedia.org/wiki/{{key}}">{{key}}</a></h2>
+            <h3>https://en.wikipedia.org/wiki/{{key}}</h3>
+            <p>{{term}} appears: {{value}} times</p>
+        </div>
+    {{/titles}}
+</div>
+
+<footer>
+    <div>Alison Berkowitz 2016</div>
+</footer>
