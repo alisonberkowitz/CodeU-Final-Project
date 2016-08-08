@@ -43,7 +43,14 @@ public class Main {
 
         get("/search/:term", (req, res) -> {
             //crawl(wc);
-            WikiSearch search = WikiSearch.search(req.params(":term"),index);
+            String[] terms = req.params(":term").split("\\P{Alpha}+");
+            System.out.println(terms[0]);
+            WikiSearch search = WikiSearch.search(terms[0], index);
+            System.out.println(terms.length);
+            for (int i=1; i<terms.length; i++) {
+                WikiSearch extrasearch = WikiSearch.search(terms[i], index);
+                search = search.or(extrasearch);
+            }
             List<Map.Entry<String, Integer>> entries = search.sort();
 
             // add titles rather than links to show in results
