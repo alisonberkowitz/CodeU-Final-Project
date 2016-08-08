@@ -45,25 +45,39 @@ public class Main {
             //crawl(wc);
             String[] terms = req.params(":term").split("\\P{Alpha}+");
             System.out.println(terms[0]);
-            WikiSearch search = WikiSearch.search(terms[0], index);
+            WikiSearch andsearch = WikiSearch.search(terms[0], index);
+            WikiSearch orsearch = andsearch;
             System.out.println(terms.length);
             for (int i=1; i<terms.length; i++) {
-                WikiSearch extrasearch = WikiSearch.search(terms[i], index);
-                search = search.or(extrasearch);
+                if (terms[i] != "a" && terms[i] != "the") {
+                    WikiSearch extrasearch = WikiSearch.search(terms[i], index);
+                    andsearch = andsearch.and(extrasearch);
+                    orsearch = orsearch.or(extrasearch);
+                }
             }
-            List<Map.Entry<String, Integer>> entries = search.sort();
+            List<Map.Entry<String, Integer>> bothentries = andsearch.sort();
+            List<Map.Entry<String, Integer>> oneentries = orsearch.sort();
 
             // add titles rather than links to show in results
             List<Map.Entry<String, Map.Entry<String, Integer>>> titles = new LinkedList<>();
-            for (Map.Entry<String, Integer> entry: entries) {
+            for (Map.Entry<String, Integer> entry: bothentries) {
                 String title = entry.getKey().replaceAll("https://en.wikipedia.org/wiki/", "");
                 title = title.replaceAll("_", " ");
                 titles.add(new AbstractMap.SimpleEntry<>(title, entry));
             }
+
+            // articles with only one of the terms will be less relevant, so later in the list results
+            for (Map.Entry<String, Integer> entry: oneentries) {
+                if (!bothentries.contains(entry)) {
+                    String title = entry.getKey().replaceAll("https://en.wikipedia.org/wiki/", "");
+                    title = title.replaceAll("_", " ");
+                    titles.add(new AbstractMap.SimpleEntry<>(title, entry));
+                }
+            }
             Map map = new HashMap();
             map.put("term", req.params(":term"));
             map.put("titles", titles);
-            map.put("listsize", entries.size());
+            map.put("listsize", titles.size());
             return new ModelAndView(map, "results.hbs");
         }, new HandlebarsTemplateEngine());
 
