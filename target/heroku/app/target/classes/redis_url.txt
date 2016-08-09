@@ -1,1 +1,0 @@
-redis://redistogo:64c9a82f0d1007a6d9c4e7a00687be05@sculpin.redistogo.com:9406/
