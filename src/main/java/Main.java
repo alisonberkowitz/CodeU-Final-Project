@@ -42,7 +42,7 @@ public class Main {
         wc.loadQueue(source);
 
         get("/search/:term", (req, res) -> {
-            //crawl(wc);
+            crawl(wc);
             String[] terms = req.params(":term").split("\\P{Alpha}+");
             int nextTerm = 1;
             WikiSearch andsearch;
@@ -96,7 +96,7 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         get("/", (req, res) -> {
-            //crawl(wc);
+            crawl(wc);
             Map map = new HashMap();
             return new ModelAndView(map, "search.hbs");
         }, new HandlebarsTemplateEngine());

@@ -3,6 +3,7 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +19,40 @@ public class TermCounter {
 	
 	private Map<String, Integer> map;
 	private String label;
+	private ArrayList<String> stopwords = new ArrayList<String>() {{
+			add("I"); 
+			add("a"); 
+			add("about"); 
+			add("an"); 
+			add("are"); 
+			add("as"); 
+			add("at"); 
+			add("be"); 
+			add("by"); 
+			add("com"); 
+			add("for"); 
+			add("from");
+			add("how");
+			add("in"); 
+			add("is"); 
+			add("it"); 
+			add("of"); 
+			add("on"); 
+			add("or"); 
+			add("that");
+			add("the"); 
+			add("this");
+			add("to"); 
+			add("was"); 
+			add("what"); 
+			add("when");
+			add("where");
+			add("who"); 
+			add("will"); 
+			add("with");
+			add("the");
+			add("www");
+	}};
 	
 	public TermCounter(String label) {
 		this.label = label;
@@ -78,7 +113,9 @@ public class TermCounter {
 		
 		for (int i=0; i<array.length; i++) {
 			String term = array[i];
-			incrementTermCount(term);
+			if (!stopwords.contains(term)){
+				incrementTermCount(term);
+			}
 		}
 	}
 
@@ -88,7 +125,6 @@ public class TermCounter {
 	 * @param term
 	 */
 	public void incrementTermCount(String term) {
-		// System.out.println(term);
 		put(term, get(term) + 1);
 	}
 
