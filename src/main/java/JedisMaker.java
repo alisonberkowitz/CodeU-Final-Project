@@ -1,4 +1,7 @@
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.Protocol;
 
 import java.io.*;
 import java.net.URI;
@@ -16,34 +19,10 @@ public class JedisMaker {
 	 */
 	public static Jedis make() throws IOException {
 
-
-		// assemble the file name
-		String slash = File.separator;
-		String filename = "redis_url.txt";
-		URL fileURL = JedisMaker.class.getClassLoader().getResource(filename);
-
-	  StringBuilder sb = new StringBuilder();
-		BufferedReader br;
-		try {
-			br = new BufferedReader(new FileReader(fileURL.getFile()));
-		} catch (FileNotFoundException e1) {
-			System.out.println("File not found: " + filename);
-			printInstructions();
-			return null;
-		}
-
-		while (true) {
-			String line = br.readLine();
-			if (line == null) break;
-			sb.append(line);
-		}
-		br.close();
-
 		URI uri;
 		try {
-			uri = new URI(sb.toString());
+			uri = new URI("redis://redistogo:8ea23f6de6651d95caf591e1c44e1287@viperfish.redistogo.com:11153/");
 		} catch (URISyntaxException e) {
-			System.out.println("Reading file: " + filename);
 			System.out.println("It looks like this file does not contain a valid URI.");
 			printInstructions();
 			return null;
@@ -80,13 +59,12 @@ public class JedisMaker {
 	 */
 	private static void printInstructions() {
 		System.out.println("");
-		System.out.println("To connect to RedisToGo, you have to provide a file called");
-		System.out.println("redis_url.txt that contains the URL of your Redis server.");
+		System.out.println("To connect to RedisToGo, you have to provide");
+		System.out.println("the URL of your Redis server.");
 		System.out.println("If you select an instance on the RedisToGo web page,");
 		System.out.println("you should see a URL that contains the information you need:");
 		System.out.println("redis://redistogo:AUTH@HOST:PORT");
-		System.out.println("Create a file called redis_url.txt in the src/resources");
-		System.out.println("directory, and paste in the URL.");
+		System.out.println("In the make() call, paste in the URL.");
 	}
 
 

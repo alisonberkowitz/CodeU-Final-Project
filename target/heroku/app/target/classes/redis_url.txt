@@ -1,1 +1,1 @@
-redis://redistogo:8ea23f6de6651d95caf591e1c44e1287@viperfish.redistogo.com:11153/
+redis://redistogo:64c9a82f0d1007a6d9c4e7a00687be05@sculpin.redistogo.com:9406/
