@@ -14,13 +14,18 @@ public class JedisIndex {
 
 	private Jedis jedis;
 
+
+	private int collection;
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param jedis
 	 */
 	public JedisIndex(Jedis jedis) {
+
 		this.jedis = jedis;
+		this.setCollection(urlSetKeys().size());
 	}
 	
 	/**
@@ -39,6 +44,14 @@ public class JedisIndex {
 	 */
 	private String termCounterKey(String url) {
 		return "TermCounter:" + url;
+	}
+
+	public int getCollection() {
+		return collection;
+	}
+
+	public void setCollection(int collection) {
+		this.collection = collection;
 	}
 
 	/**

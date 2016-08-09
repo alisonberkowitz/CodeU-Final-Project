@@ -42,7 +42,7 @@ public class Main {
         wc.loadQueue(source);
 
         get("/search/:term", (req, res) -> {
-            //crawl(wc);
+            crawl(wc);
             String[] terms = req.params(":term").split("\\P{Alpha}+");
             System.out.println(terms[0]);
             WikiSearch andsearch = WikiSearch.search(terms[0], index);
@@ -55,19 +55,19 @@ public class Main {
                     orsearch = orsearch.or(extrasearch);
                 }
             }
-            List<Map.Entry<String, Integer>> bothentries = andsearch.sort();
-            List<Map.Entry<String, Integer>> oneentries = orsearch.sort();
+            List<Map.Entry<String, Double>> bothentries = andsearch.sort();
+            List<Map.Entry<String, Double>> oneentries = orsearch.sort();
 
             // add titles rather than links to show in results
-            List<Map.Entry<String, Map.Entry<String, Integer>>> titles = new LinkedList<>();
-            for (Map.Entry<String, Integer> entry: bothentries) {
+            List<Map.Entry<String, Map.Entry<String, Double>>> titles = new LinkedList<>();
+            for (Map.Entry<String, Double> entry: bothentries) {
                 String title = entry.getKey().replaceAll("https://en.wikipedia.org/wiki/", "");
                 title = title.replaceAll("_", " ");
                 titles.add(new AbstractMap.SimpleEntry<>(title, entry));
             }
 
             // articles with only one of the terms will be less relevant, so later in the list results
-            for (Map.Entry<String, Integer> entry: oneentries) {
+            for (Map.Entry<String, Double> entry: oneentries) {
                 if (!bothentries.contains(entry)) {
                     String title = entry.getKey().replaceAll("https://en.wikipedia.org/wiki/", "");
                     title = title.replaceAll("_", " ");
@@ -82,7 +82,7 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         get("/", (req, res) -> {
-            //crawl(wc);
+            crawl(wc);
             Map map = new HashMap();
             return new ModelAndView(map, "search.hbs");
         }, new HandlebarsTemplateEngine());

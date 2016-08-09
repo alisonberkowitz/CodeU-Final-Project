@@ -12,14 +12,14 @@ import java.util.Map.Entry;
 public class WikiSearch {
 	
 	// map from URLs that contain the term(s) to relevance score
-	private Map<String, Integer> map;
+	private Map<String, Double> map;
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param map
 	 */
-	public WikiSearch(Map<String, Integer> map) {
+	public WikiSearch(Map<String, Double> map) {
 		this.map = map;
 	}
 	
@@ -29,8 +29,8 @@ public class WikiSearch {
 	 * @param url
 	 * @return
 	 */
-	public Integer getRelevance(String url) {
-		Integer relevance = map.get(url);
+	public Double getRelevance(String url) {
+		Double relevance = map.get(url);
 		return relevance==null ? 0: relevance;
 	}
 	
@@ -40,8 +40,8 @@ public class WikiSearch {
 	 * @param map
 	 */
 	private  void print() {
-		List<Entry<String, Integer>> entries = sort();
-		for (Entry<String, Integer> entry: entries) {
+		List<Entry<String, Double>> entries = sort();
+		for (Entry<String, Double> entry: entries) {
 			System.out.println(entry);
 		}
 	}
@@ -54,10 +54,10 @@ public class WikiSearch {
 	 */
 	public WikiSearch or(WikiSearch that) {
         // FILL THIS IN!
-        Map<String, Integer> res = new HashMap<String, Integer>();
+        Map<String, Double> res = new HashMap<String, Double>();
         res.putAll(that.map);
-        for (Entry<String, Integer> entry: map.entrySet()) {
-        	Integer val = (res.get(entry.getKey()) == null) ? 0 : res.get(entry.getKey());
+        for (Entry<String, Double> entry: map.entrySet()) {
+			Double val = (res.get(entry.getKey()) == null) ? 0.0 : res.get(entry.getKey());
 			res.put(entry.getKey(), val+entry.getValue());
 		}
 		return new WikiSearch(res);
@@ -71,9 +71,9 @@ public class WikiSearch {
 	 */
 	public WikiSearch and(WikiSearch that) {
         // FILL THIS IN!
-        Map<String, Integer> res = new HashMap<String, Integer>();
-        for (Entry<String, Integer> entry: map.entrySet()) {
-        	Integer val = that.map.get(entry.getKey());
+        Map<String, Double> res = new HashMap<String, Double>();
+        for (Entry<String, Double> entry: map.entrySet()) {
+			Double val = that.map.get(entry.getKey());
         	if (val != null) {
         		res.put(entry.getKey(), val+entry.getValue());
         	}
@@ -89,8 +89,8 @@ public class WikiSearch {
 	 */
 	public WikiSearch minus(WikiSearch that) {
         // FILL THIS IN!
-		Map<String, Integer> res = new HashMap<String, Integer>();
-        for (Entry<String, Integer> entry: map.entrySet()) {
+		Map<String, Double> res = new HashMap<String, Double>();
+        for (Entry<String, Double> entry: map.entrySet()) {
         	if (!that.map.containsKey(entry.getKey())) {
         		res.put(entry.getKey(), entry.getValue());
         	}
@@ -115,11 +115,11 @@ public class WikiSearch {
 	 * 
 	 * @return List of entries with URL and relevance.
 	 */
-	public List<Entry<String, Integer>> sort() {
-		List<Entry<String, Integer>> list = new LinkedList<Entry<String, Integer>>(map.entrySet());
-		Comparator<Entry<String, Integer>> comparator = new Comparator<Entry<String, Integer>>() {
+	public List<Entry<String, Double>> sort() {
+		List<Entry<String, Double>> list = new LinkedList<Entry<String, Double>>(map.entrySet());
+		Comparator<Entry<String, Double>> comparator = new Comparator<Entry<String, Double>>() {
             @Override
-            public int compare(Entry<String, Integer> entry1, Entry<String, Integer> entry2) {
+            public int compare(Entry<String, Double> entry1, Entry<String, Double> entry2) {
                 return (entry2.getValue()).compareTo(entry1.getValue());
             }
         };
@@ -135,8 +135,42 @@ public class WikiSearch {
 	 * @return
 	 */
 	public static WikiSearch search(String term, JedisIndex index) {
-		Map<String, Integer> map = index.getCounts(term);
+		//Map<String, Integer> map = index.getCounts(term);
+		String[] arr = term.split(" "); // split into terms
+
+		Map<String, Double> map = new HashMap<>();
+
+		// get total number of docs in corpus
+		int col = index.getCollection();
+
+		// interate over each term and a calc tf-idf
+		for(int i = 0; i < arr.length; i++) {
+			String curr = arr[i];
+
+			Map<String, Integer> termMap = index.getCounts(curr);
+
+			// find the number of documents where the term appears
+			int relDocs = index.getURLs(curr).size();
+
+			for(String url: termMap.keySet()) {
+				int termCount = termMap.get(url);
+				double tf_idf = termFrequency(termCount) * idf(col, relDocs);
+				if(map.containsKey(url)) {
+					map.put(url, map.get(url) + tf_idf);
+				} else {
+					map.put(url, tf_idf);
+				}
+			}
+		}
 		return new WikiSearch(map);
+	}
+
+	private static double termFrequency(int termCount) {
+		return 1 + Math.log10(termCount);
+	}
+
+	private static double idf(int collection, int relevantDocs) {
+		return Math.log10(collection/relevantDocs);
 	}
 
 	public static void main(String[] args) throws IOException {

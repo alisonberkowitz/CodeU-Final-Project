@@ -21,7 +21,8 @@ public class JedisMaker {
 
 		URI uri;
 		try {
-			uri = new URI("redis://redistogo:8ea23f6de6651d95caf591e1c44e1287@viperfish.redistogo.com:11153/");
+			// redis-15562.c8.us-east-1-3.ec2.cloud.redislabs.com:15562
+			uri = new URI("redis://redislabs:codeu@redis-15562.c8.us-east-1-3.ec2.cloud.redislabs.com:15562");
 		} catch (URISyntaxException e) {
 			System.out.println("It looks like this file does not contain a valid URI.");
 			printInstructions();
