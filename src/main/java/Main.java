@@ -44,12 +44,26 @@ public class Main {
         get("/search/:term", (req, res) -> {
             //crawl(wc);
             String[] terms = req.params(":term").split("\\P{Alpha}+");
-            System.out.println(terms[0]);
-            WikiSearch andsearch = WikiSearch.search(terms[0], index);
-            WikiSearch orsearch = andsearch;
+            int nextTerm = 1;
+            WikiSearch andsearch;
+            WikiSearch orsearch;
+            if ((terms[0].equals("the") || (terms[0]).equals("a")) && terms.length > 1) {
+                andsearch = WikiSearch.search(terms[1], index);
+                orsearch = andsearch;
+                nextTerm++;
+            }
+            else {
+                andsearch = WikiSearch.search(terms[0], index);
+                orsearch = andsearch;
+            }
+
             System.out.println(terms.length);
-            for (int i=1; i<terms.length; i++) {
-                if (terms[i] != "a" && terms[i] != "the") {
+            for (int i=nextTerm; i<terms.length; i++) {
+                if ((terms[i]).equals("the") || (terms[i]).equals("a")) {
+                    System.out.println(terms[i]);
+                }
+                else {
+
                     WikiSearch extrasearch = WikiSearch.search(terms[i], index);
                     andsearch = andsearch.and(extrasearch);
                     orsearch = orsearch.or(extrasearch);
