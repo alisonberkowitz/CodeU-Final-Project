@@ -7,10 +7,12 @@
     display: inline;
     padding-right: 1em;
     color: white;
+    font-size: larger;
 }
 
 form {
 	margin: 0;
+
 }
 
 .container {
@@ -49,3 +51,10 @@ a:hover {
     color: darkgray;
     font-size: 1em;
 }
+
+img {
+    height: 2em;
+    float: left;
+    padding-right: 1em;
+}
+

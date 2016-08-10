@@ -7,6 +7,10 @@ h1 {
 	text-align: center;
 }
 
+img {
+    height: 5em;
+}
+
 footer {
 	position: absolute;
 	bottom: 0;
