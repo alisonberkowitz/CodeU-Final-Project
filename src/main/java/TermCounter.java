@@ -19,8 +19,8 @@ public class TermCounter {
 	
 	private Map<String, Integer> map;
 	private String label;
-	private ArrayList<String> stopwords = new ArrayList<String>() {{
-			add("I"); 
+	public static final ArrayList<String> stopwords = new ArrayList<String>() {{
+			add("i");
 			add("a"); 
 			add("about"); 
 			add("an"); 

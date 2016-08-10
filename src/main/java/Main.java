@@ -47,7 +47,7 @@ public class Main {
             int nextTerm = 1;
             WikiSearch andsearch;
             WikiSearch orsearch;
-            if ((terms[0].toLowerCase().equals("the") || (terms[0].toLowerCase()).equals("a")) && terms.length > 1) {
+            if ((TermCounter.stopwords.contains(terms[0].toLowerCase())) && terms.length > 1) {
                 andsearch = WikiSearch.search(terms[1].toLowerCase(), index);
                 orsearch = andsearch;
                 nextTerm++;
@@ -59,7 +59,7 @@ public class Main {
 
             System.out.println(terms.length);
             for (int i=nextTerm; i<terms.length; i++) {
-                if ((terms[i].toLowerCase()).equals("the") || (terms[i].toLowerCase()).equals("a")) {
+                if (TermCounter.stopwords.contains(terms[0].toLowerCase())) {
                     System.out.println(terms[i].toLowerCase());
                 }
                 else {
