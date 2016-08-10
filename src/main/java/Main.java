@@ -77,6 +77,9 @@ public class Main {
                     if (term.endsWith("ing")) {
                         term = term.substring(0, term.length()-3);
                     }
+                    if (term.endsWith("s")) {
+                        term = term.substring(0, term.length()-1);
+                    }
                     andsearch = WikiSearch.search(term, index);
                     orsearch = andsearch;
                     WikiSearch extrasearch = WikiSearch.search(term, index);

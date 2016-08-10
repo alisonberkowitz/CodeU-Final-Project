@@ -122,6 +122,9 @@ public class TermCounter {
 				if (term.endsWith("ing")) {
 					term = term.substring(0, term.length()-3);
 				}
+				if (term.endsWith("s")) {
+					term = term.substring(0, term.length()-1);
+				}
 				incrementTermCount(term);
 			}
 		}
