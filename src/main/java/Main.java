@@ -47,24 +47,24 @@ public class Main {
             int nextTerm = 1;
             WikiSearch andsearch;
             WikiSearch orsearch;
-            if ((terms[0].equals("the") || (terms[0]).equals("a")) && terms.length > 1) {
-                andsearch = WikiSearch.search(terms[1], index);
+            if ((terms[0].toLowerCase().equals("the") || (terms[0].toLowerCase()).equals("a")) && terms.length > 1) {
+                andsearch = WikiSearch.search(terms[1].toLowerCase(), index);
                 orsearch = andsearch;
                 nextTerm++;
             }
             else {
-                andsearch = WikiSearch.search(terms[0], index);
+                andsearch = WikiSearch.search(terms[0].toLowerCase(), index);
                 orsearch = andsearch;
             }
 
             System.out.println(terms.length);
             for (int i=nextTerm; i<terms.length; i++) {
-                if ((terms[i]).equals("the") || (terms[i]).equals("a")) {
-                    System.out.println(terms[i]);
+                if ((terms[i].toLowerCase()).equals("the") || (terms[i].toLowerCase()).equals("a")) {
+                    System.out.println(terms[i].toLowerCase());
                 }
                 else {
 
-                    WikiSearch extrasearch = WikiSearch.search(terms[i], index);
+                    WikiSearch extrasearch = WikiSearch.search(terms[i].toLowerCase(), index);
                     andsearch = andsearch.and(extrasearch);
                     orsearch = orsearch.or(extrasearch);
                 }
