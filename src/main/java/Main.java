@@ -37,7 +37,7 @@ public class Main {
         JedisIndex index = new JedisIndex(jedis);
 
         // set up crawler
-        String source = "https://en.wikipedia.org/wiki/Java_(programming_language)";
+        String source = "https://en.wikipedia.org/wiki/Lilac_(color)";
         WikiCrawler wc = new WikiCrawler(source, index);
         wc.loadQueue(source);
 
@@ -53,18 +53,33 @@ public class Main {
                 nextTerm++;
             }
             else {
-                andsearch = WikiSearch.search(terms[0].toLowerCase(), index);
+                String term = terms[0].toLowerCase();
+                if (term.endsWith("ed")) {
+                    term = term.substring(0, term.length()-2);
+                }
+                if (term.endsWith("ing")) {
+                    term = term.substring(0, term.length()-3);
+                }
+                andsearch = WikiSearch.search(term, index);
                 orsearch = andsearch;
             }
 
             System.out.println(terms.length);
             for (int i=nextTerm; i<terms.length; i++) {
-                if (TermCounter.stopwords.contains(terms[0].toLowerCase())) {
+                if (TermCounter.stopwords.contains(terms[i].toLowerCase())) {
                     System.out.println(terms[i].toLowerCase());
                 }
                 else {
-
-                    WikiSearch extrasearch = WikiSearch.search(terms[i].toLowerCase(), index);
+                    String term = terms[i].toLowerCase();
+                    if (term.endsWith("ed")) {
+                        term = term.substring(0, term.length()-2);
+                    }
+                    if (term.endsWith("ing")) {
+                        term = term.substring(0, term.length()-3);
+                    }
+                    andsearch = WikiSearch.search(term, index);
+                    orsearch = andsearch;
+                    WikiSearch extrasearch = WikiSearch.search(term, index);
                     andsearch = andsearch.and(extrasearch);
                     orsearch = orsearch.or(extrasearch);
                 }

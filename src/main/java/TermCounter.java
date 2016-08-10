@@ -33,6 +33,7 @@ public class TermCounter {
 			add("for"); 
 			add("from");
 			add("how");
+			add("if");
 			add("in"); 
 			add("is"); 
 			add("it"); 
@@ -40,7 +41,8 @@ public class TermCounter {
 			add("on"); 
 			add("or"); 
 			add("that");
-			add("the"); 
+			add("the");
+			add("they");
 			add("this");
 			add("to"); 
 			add("was"); 
@@ -50,8 +52,8 @@ public class TermCounter {
 			add("who"); 
 			add("will"); 
 			add("with");
-			add("the");
 			add("www");
+			add("your");
 	}};
 	
 	public TermCounter(String label) {
@@ -114,6 +116,12 @@ public class TermCounter {
 		for (int i=0; i<array.length; i++) {
 			String term = array[i];
 			if (!stopwords.contains(term)){
+				if (term.endsWith("ed")) {
+					term = term.substring(0, term.length()-2);
+				}
+				if (term.endsWith("ing")) {
+					term = term.substring(0, term.length()-3);
+				}
 				incrementTermCount(term);
 			}
 		}
