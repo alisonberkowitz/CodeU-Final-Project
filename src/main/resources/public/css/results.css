@@ -33,13 +33,19 @@ a:hover {
 	text-decoration: underline;
 }
 
+.result h2{
+	font-size: 1.3em;
+}
+
 .result h3{
 	margin-top: .3em;
 	margin-bottom: .3em;
 	font-weight: normal;
+	font-size: 1em;
 }
 
 .result p {
 	margin-top: .3em;
     color: darkgray;
+    font-size: 1em;
 }
