@@ -35,10 +35,11 @@ form {
 
 a:link {
 	text-decoration: none;
+	color: #cc99ff;
 }
 
 a:hover {
-	text-decoration: underline;
+	color: darkmagenta;
 }
 
 .result h2{
