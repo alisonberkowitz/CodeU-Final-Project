@@ -3,6 +3,11 @@ body {
     margin: 0;
 }
 
+#button {
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
 footer {
 	text-align: center;
 	background: #cc99ff;

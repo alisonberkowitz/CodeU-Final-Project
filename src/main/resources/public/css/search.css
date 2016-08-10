@@ -8,7 +8,34 @@ h1 {
 }
 
 img {
-    height: 5em;
+    height: 50%;
+    margin: 3em;
+}
+
+input {
+	padding: 1em;
+}
+
+#textinput {
+	border-radius: 4px;
+	width: 50%;
+}
+
+#button {
+	background-color: #cc99ff;
+	border-color: #cc99ff;
+	font-weight: 400;
+    line-height: 1.25;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: .5rem 1rem;
+    font-size: 1rem;
 }
 
 footer {

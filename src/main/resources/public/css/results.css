@@ -10,13 +10,19 @@
     font-size: larger;
 }
 
+#button {
+	background-color: white;
+	border-color: white;
+	color: #cc99ff;
+}
+
 form {
 	margin: 0;
-
+	padding: 1em;
 }
 
 .container {
-	margin: 1em;
+	margin: 2em;
 }
 
 .result {
@@ -53,7 +59,7 @@ a:hover {
 }
 
 img {
-    height: 2em;
+    height: 3em;
     float: left;
     padding-right: 1em;
 }
