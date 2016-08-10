@@ -19,9 +19,11 @@ input {
 #textinput {
 	border-radius: 4px;
 	width: 50%;
+	font-size: x-large;
 }
 
 #button {
+	margin: 1em;
 	background-color: #cc99ff;
 	border-color: #cc99ff;
 	font-weight: 400;
